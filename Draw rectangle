@@ -1,0 +1,29 @@
+import turtle
+S = turtle.Screen()
+T = turtle.Turtle()
+T.speed(100)
+T.pencolor("black")
+S.bgcolor("white")
+def draw_rect():
+    V = int(input("How long do you want your rectangle to be in pixels on a Vertical/Y axis? "))
+    H = int(input("How long do you want your rectangle to be in pixels on a Horizontal/X axis? "))
+    X = int(input("Where do you want the rectangle to apear on a X axis? "))
+    Y = int(input("Where do you want the rectangle to apear on a Y axis? "))
+    T.penup()
+    T.goto(X, Y)
+    T.backward(H*0.5)
+    T.left(90)
+    T.backward(V*0.5)
+    T.pendown()
+    for i in range(2):
+        T.forward(V)
+        T.right(90)
+        T.forward(H)
+        T.right(90)
+    T.setheading(0)
+    if str(input("Do you want to draw another rectangle? \nType - KinitoPET - to confirm. ")) == "KinitoPET":
+        draw_rect()
+    else:
+        exit()
+draw_rect()
+S.mainloop()
