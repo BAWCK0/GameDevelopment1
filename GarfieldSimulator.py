@@ -1,4 +1,4 @@
-#The best simulator ever made in history. Game of the year, decade and century.
+#The best game ever made in history. Game of the year, decade and century.
 import random
 import pgzrun
 HEIGHT = 500
