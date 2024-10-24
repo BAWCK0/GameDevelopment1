@@ -1,15 +1,15 @@
 import pgzrun
 HEIGHT = 600
 WIDTH = 800
-title = "quiz master"
+title = "qwiz master"
 marquee_box = Rect(0,0,880,80)
 question_box = Rect(0,0,650,150)
 timer_box = Rect(0,0,150,150)
 skip_box = Rect(0,0,150,330)
-answer_box1 = Rect(0,0,301,150)
-answer_box2 = Rect(0,0,300,151)
-answer_box3 = Rect(0,0,299,150)
-answer_box4 = Rect(0,0,300,149)
+answer_box1 = Rect(0,0,300,150)
+answer_box2 = Rect(0,0,300,150)
+answer_box3 = Rect(0,0,300,150)
+answer_box4 = Rect(0,0,300,150)
 score = 0
 time_left = 10
 question_filename = "questions.txt"
@@ -32,19 +32,87 @@ def draw():
     global marquee_message
     screen.clear()
     screen.fill("black")
-    screen.draw.filled_rect(marquee_box"black")
-    screen.draw.filled_rect(question_box"blue")
-    screen.draw.filled_rect(timer_box"blue")
-    screen.draw.filled_rect(skip_box"green")
+    screen.draw.filled_rect(marquee_box,"black")
+    screen.draw.filled_rect(question_box,"blue")
+    screen.draw.filled_rect(timer_box,"blue")
+    screen.draw.filled_rect(skip_box,"green")
     for i in answer_boxes:
         screen.draw.filled_rect(i,"orange")
     marquee_message = "Welcome to QWIZ MASTER"
     marquee_message = marquee_message + f"q:{question_index}off{question_count}"
     screen.draw.textbox(marquee_message, marquee_box, color = "white")
     screen.draw.textbox(str(time_left), timer_box, color = "white")
-    screen.draw.textbox("skip", skip_box, color = "black" angle = -90)
-    screen.draw.textbow(questions[0].strip(),question_box, color = "white")
+    screen.draw.textbox("skip", skip_box, color = "black", angle = -90)
+    screen.draw.textbox(question[0].strip(),question_box, color = "white")
     index = 1
     for i in answer_boxes:
-        screen.draw.textbox(questions[index].strip(),i, color = "black")
-        index = index + 1
+        screen.draw.textbox(question[index].strip(),i, color = "black")
+        index += 1
+def move_marquee():
+    marquee_box.x = marquee_box.x - 2
+    if marquee_box.right < 0:
+        marquee_box.left = WIDTH
+
+def read_question_file():
+    global question_count, questions
+    q_file = open(question_filename, "r")
+    for question in q_file:
+        questions.append(question)
+        question_count += 1
+    q_file.close()
+
+def read_next_question():
+    global question_index
+    question_index += 1
+    return questions.pop(0).split(",")
+
+def on_mouse_down(pos):
+    index = 1
+    for box in answer_boxes:
+        if box.collidepoint(pos):
+            if index is int(question[5]):
+                correct_answer()
+            else:
+                gameover()
+        index += 1
+    if skip_box.collidepoint(pos):
+        skip_question()
+
+def correct_answer():
+    global score, question, time_left, questions
+    score += 1
+    if questions:
+        question = read_next_question()
+        time_left = 10
+    else:
+        gameover()
+
+def gameover():
+    global question, time_left, is_gameover
+    message = f"Gameover you got {score} questions correct."
+    question = [message, "L", "L", "L", "L", 5]
+    time_left = 0
+    is_gameover = True
+
+def skip_question():
+    global time_left, question
+    if questions and not is_gameover:
+        question = read_next_question()
+        time_left = 10
+    else:
+        gameover()
+
+def update_time_left():
+    global time_left
+    if time_left:
+        time_left -= 1
+    else:
+        gameover()
+
+def update():
+    move_marquee()
+
+read_question_file()
+question  = read_next_question()
+clock.schedule_interval(update_time_left,1)
+pgzrun.go()
