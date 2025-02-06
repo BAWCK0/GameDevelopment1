@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from time import *
-pygame.__init__()
+pygame.init()
 screen = pygame.display.set_mode((600,600))
 player_x = 200
 player_y = 200
@@ -17,11 +17,41 @@ while player_y < 600:
             pygame.quit()
             exit(0)
         if event.type == pygame.KEYDOWN:
-            if event.key == K_UP:
+            if event.key == K_DOWN:
                 keys[0] = True
-            elif event.key == K_DOWN:
+        elif event.type == pygame.KEYUP:
+            if event.key == K_UP:
                 keys[1] = True
-            elif event.key == K_LEFT:
+        elif event.type == pygame.KEYLEFT:
+            if event.key == K_LEFT:
                 keys[2] = True
-            elif event.key == K_RIGHT:
+        elif event.type == pygame.KEYRIGHT:
+            if event.key == K_RIGHT:
                 keys[3] = True
+        if event.key == pygame.KEYUP:
+                if event.key == K_UP:
+                    keys[0] = False
+        elif event.key == pygame.KEYDOWN:
+                if event.key == K_DOWN:
+                    keys[1] = False
+        elif event.key == pygame.KEYLEFT:
+                if event.key == K_LEFT:
+                    keys[2] = False
+        elif event.key == pygame.KEYRIGHT:
+                if event.key == K_RIGHT:
+                    keys[3] = False
+    if keys[0]:
+        if player_y > 0:
+            player_y -= 7
+    elif keys[2]:
+        if player_y < 536:
+            player_y += 7
+    elif keys[1]:
+        if player_x > 0:
+            player_x -= 2
+    elif keys[3]:
+        if player_x < 536:
+            player_x += 2
+    player_y += 5
+    sleep(0.05)
+print("gameover")
