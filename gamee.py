@@ -35,6 +35,16 @@ YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(SPACESHIP_HEIG
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(SPACESHIP_HEIGHT, SPACESHIP_WIDTH, 90))
 SPACE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'space.png')), (WIDTH, HEIGHT))
 
+def yellow_handle_movement(k_p, yellow):
+    if k_p[pygame.K_a] and yellow.x - VEL > 0:
+        yellow.x -= VEL
+    if k_p[pygame.K_d] and yellow.x + VEL + yellow.width > BORDER.x:
+        yellow.x += VEL
+    if k_p[pygame.K_w] and yellow.y - VEL > 0:
+        yellow.y -= VEL
+    if k_p[pygame.K_s] and yellow.y + VEL > HEIGHT:
+        yellow.y += VEL
+
 def main():
     red = pygame.Rect(700,300,SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(700,300,SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -62,4 +72,25 @@ def main():
                     bullet = pygame.Rect(RED.x, RED.y + red.height/2, 10,5)
                     red_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
-
+            if eve.type == YELLOW_HIT:
+            yellow_health -= 1  
+            BULLET_HIT_SOUND.play
+        
+            if eve.type == RED_HIT:
+            red_health -= 1
+            BULLET_HIT_SOUND.play
+        winner_text = ""
+        if yellow_health <= 0:
+            winner_text = "red wins :D"
+        if red_health <= 0:
+            winner_text = "yellow wins :D"
+        if winner_text != "":
+            draw_winner(winner_text)
+            break
+        keys_pressed = pygame.key.get_pressed()
+        yellow_handle_movement(keys_pressed, yellow)
+        red_handle_movement(keys_pressed, red)
+        handle_bullets(yellow_bullets, yellow, red)
+        draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_health)
+        
+main()
