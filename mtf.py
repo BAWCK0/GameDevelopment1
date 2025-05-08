@@ -7,6 +7,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGTH))
 WIN.fill(255,255,255)
 pygame.display.set_caption('Match or godzilla will arise')
 pygame.display.update
+
 garfield_image = pygame.image.load(os.path.join('Assets', 'garfield.jpg'))
 snake_image = pygame.image.load(os.path.join('Assets', 'spaceship_red.png'))
 ghost_image = pygame.image.load(os.path.join('Assets', 'ghostr'))
@@ -25,9 +26,15 @@ image_position = {
     'ghost': (150, 500)
 }
 
-for name, pos in image_position.items:
+for name, pos in image_position.items():
     if name == 'garfield':
         WIN.blit(garfield_image, pos)
+
+    elif name == 'snake':
+        WIN.blit(snake_image, pos)
+
+    elif name == 'ghost':
+        WIN.blit(ghost_image, pos)
         
 
 
