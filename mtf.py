@@ -15,7 +15,8 @@ font = pygame.font.SysFont('wingdings', 40)
 texts = {
     'garfield': font.render('Garfield', True, (0,0,0)), 
     'snake': font.render('Snake', True, (0,0,0)),
-    'ghost': font.render('Ghost spooookyyyyy', True, (0,0,0))}
+    'ghost': font.render('Ghost spooookyyyyy', True, (0,0,0))
+    }
 run = True
 
 game_names = list(texts.keys())
@@ -35,6 +36,9 @@ for name, pos in image_position.items():
 
     elif name == 'ghost':
         WIN.blit(ghost_image, pos)
-        
+
+yp = [100, 300, 500]
+for i, name in enumerate(game_names):
+    WIN.blit(texts[name], (350, yp[i]))
 
 
