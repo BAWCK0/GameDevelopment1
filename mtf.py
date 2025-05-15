@@ -37,8 +37,35 @@ for name, pos in image_position.items():
     elif name == 'ghost':
         WIN.blit(ghost_image, pos)
 
-yp = [100, 300, 500]
+ypositions = [100, 300, 500]
+labelpositions = {}
 for i, name in enumerate(game_names):
-    WIN.blit(texts[name], (350, yp[i]))
+    WIN.blit(texts[name], (350, ypositions[i]))
+    labelpositions[name] = pygame.Rect(350, ypositions[i], 200, 50)
 
+image_rects = {}
 
+for names, positions in image_position.items():
+    image_rects[names] = pygame.Rect(positions[0], positions[1], 175, 175)
+    
+pygame.display.update()
+
+c_matches = {
+    "garfield":"garfield",
+    "snake":"snake",
+    "ghost":"ghost"
+}
+user_matches = []
+match_count = 0
+pos = None
+
+while run:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            pygame.draw.circle(WIN, (0, 0, 0), pos, 10, 0)
+            pygame.display.update()
+        elif event.type == pygame.MOUSEBUTTONUP:
