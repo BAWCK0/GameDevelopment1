@@ -4,13 +4,12 @@ import os
 pygame.font.init()
 WIDTH, HEIGTH = 650,600
 WIN = pygame.display.set_mode((WIDTH, HEIGTH))
-WIN.fill(255,255,255)
+WIN.fill(255, 255, 255)
 pygame.display.set_caption('Match or godzilla will arise')
 pygame.display.update
-
 garfield_image = pygame.image.load(os.path.join('Assets', 'garfield.jpg'))
 snake_image = pygame.image.load(os.path.join('Assets', 'spaceship_red.png'))
-ghost_image = pygame.image.load(os.path.join('Assets', 'ghostr'))
+ghost_image = pygame.image.load(os.path.join('Assets', 'ghostr.png'))
 font = pygame.font.SysFont('wingdings', 40)
 texts = {
     'garfield': font.render('Garfield', True, (0,0,0)), 
@@ -68,4 +67,36 @@ while run:
             pos = pygame.mouse.get_pos()
             pygame.draw.circle(WIN, (0, 0, 0), pos, 10, 0)
             pygame.display.update()
+            
         elif event.type == pygame.MOUSEBUTTONUP:
+            pos2 = pygame.mouse.get_pos()
+            pygame.draw.line(WIN, (0, 0, 0), pos, pos2, 3)
+            pygame.draw.circle(WIN, (0, 0, 0), pos, 10, 0)
+            pygame.display.update()
+            
+            from_game = None
+            to_label = None
+            
+            for name, rect in image_rects.itmes():
+                if rect.collidepoint(pos):
+                    from_game = name
+                    
+            for name, rect in labelpositions.items():
+                if rect.collidepoint(pos2):
+                    to_label = name
+                    
+            if from_game != None and to_label != None:
+                match_count += 1
+                user_matches.append((from_game, to_label))
+            if user_matches == 3:
+                c = 0
+                for game, label in user_matches:
+                    if c_matches[game] == label:
+                        c += 1
+                if c == 3:
+                    result = WIN.blit(font.render('YIPPIE YOU WONN!!!! :DDD', True, (0,255,0), (WIDTH/2, HEIGTH/2)))
+                else:
+                    WIN.blit(font.render('heeheehoohaa', True, (255,0,0), (WIDTH/2, HEIGTH/2)))
+                    run = False
+                    pygame.quit()
+                pygame.display.update()
