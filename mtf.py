@@ -4,7 +4,7 @@ import os
 pygame.font.init()
 WIDTH, HEIGTH = 650,600
 WIN = pygame.display.set_mode((WIDTH, HEIGTH))
-WIN.fill(255, 255, 255)
+WIN.fill((255, 255, 255))
 pygame.display.set_caption('Match or godzilla will arise')
 pygame.display.update
 garfield_image = pygame.image.load(os.path.join('Assets', 'garfield.jpg'))
@@ -19,7 +19,7 @@ texts = {
 run = True
 
 game_names = list(texts.keys())
-game_names = random.shuffle(game_names[:])
+random.shuffle(game_names[:])
 image_position = {
     'garfield': (150, 100),
     'snake': (150, 300),
@@ -77,7 +77,7 @@ while run:
             from_game = None
             to_label = None
             
-            for name, rect in image_rects.itmes():
+            for name, rect in image_rects.items():
                 if rect.collidepoint(pos):
                     from_game = name
                     
