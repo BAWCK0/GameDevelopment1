@@ -23,10 +23,10 @@ class Recycalable(pygame.sprite.Sprite):
 class Non_Recycalable(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'garfield.jpg')), (30, 30))
+        self.image = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Ball.png')), (30, 30))
         self.rect = self.image.get_rect()
         
-recycleimages = ['las.jpg','pizza.jph' ,'chipsimg.png']
+recycleimages = ['las.jpg','pizza.jpg' ,'chipsimg.png']
 
 item_list = pygame.sprite.Group()
 allsprites = pygame.sprite.Group()
@@ -57,8 +57,8 @@ playing = True
 score = 0
 c = pygame.time.Clock()
 start_time = time.time()
-myfont = pygame.font.SysFont('WingDings', 22)
-timingfont = pygame.font.Sysfont('WingDings', 22)
+myfont = pygame.font.SysFont('Comic Sans', 22)
+timingfont = pygame.font.SysFont('Comic Sans', 22)
 text = myfont.render(f'Score = {score}', True, WHITE)
 
 while playing:
@@ -71,40 +71,42 @@ while playing:
             
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                bin.x -= 17.5
+                bin.rect.x -= 17.5
                 
             if event.key == pygame.K_RIGHT:
-                bin.x += 17.5
+                bin.rect.x += 17.5
             
             if event.key == pygame.K_DOWN:
-                bin.y += 17.5
+                bin.rect.y += 17.5
                 
             if event.key == pygame.K_UP:
-                bin.y -= 17.5
+                bin.rect.y -= 17.5
                 
-            if bin.right > WIDTH:
-                bin.x = WIDTH-bin.width
+            if bin.rect.right > WIDTH:
+                bin.rect.x = WIDTH-bin.rect.width
                 
-            if bin.left < 0:
-                bin.x = 0
+            if bin.rect.left < 0:
+                bin.rect.x = 0
                 
-            if bin.top > HEIGHT:
-                bin.y = HEIGHT
+            if bin.rect.top > HEIGHT:
+                bin.rect.y = HEIGHT
                 
-            if bin.bottom < 0:
-                bin.y = 0 + bin.height
+            if bin.rect.bottom < 0:
+                bin.rect.y = 0 + bin.rect.height
                 
             for recyclables in item_list:
                 if bin.collidepoint(recyclables):
                     score += 1
                     item_list.remove(recyclables)
                     allsprites.remove(recyclables)
+                    text = myfont.render(f'Score = {score}', True, WHITE)
                     
             for nonrecyclables in plastic_list:
                 if bin.collidepoint(nonrecyclables):
                     score -= 5
                     plastic_list.remove(nonrecyclables)
                     allsprites.remove(nonrecyclables)
+                    text = myfont.render(f'Score = {score}', True, WHITE)
                     
             
             
@@ -117,11 +119,13 @@ while playing:
                 text = myfont.render('Bin loot FAILED', True, RED)
         
         for sprites in allsprites:
-            WIN.blit(sprites.image, sprites.rect)
+            WIN.blit(sprites.image, sprites.rect) # CAN BE SHORTENED WITH 'allspirtes.draw' 😱😱😱😱😱😱
         
         WIN.blit(text, (250, 40))
         countdown = timingfont.render(f'Time left = {60 - timeelapsed}', True, WHITE)
         WIN.blit(countdown, (20, 10))
+        pygame.display.update()
             
+pygame.quit()
     
     
