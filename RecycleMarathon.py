@@ -69,6 +69,45 @@ while playing:
             playing = False
             pygame.quit()
             
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                bin.x -= 17.5
+                
+            if event.key == pygame.K_RIGHT:
+                bin.x += 17.5
+            
+            if event.key == pygame.K_DOWN:
+                bin.y += 17.5
+                
+            if event.key == pygame.K_UP:
+                bin.y -= 17.5
+                
+            if bin.right > WIDTH:
+                bin.x = WIDTH-bin.width
+                
+            if bin.left < 0:
+                bin.x = 0
+                
+            if bin.top > HEIGHT:
+                bin.y = HEIGHT
+                
+            if bin.bottom < 0:
+                bin.y = 0 + bin.height
+                
+            for recyclables in item_list:
+                if bin.collidepoint(recyclables):
+                    score += 1
+                    item_list.remove(recyclables)
+                    allsprites.remove(recyclables)
+                    
+            for nonrecyclables in plastic_list:
+                if bin.collidepoint(nonrecyclables):
+                    score -= 5
+                    plastic_list.remove(nonrecyclables)
+                    allsprites.remove(nonrecyclables)
+                    
+            
+            
         timeelapsed = time.time() - start_time
         if timeelapsed >= 60:
             if score >= 10:
@@ -76,6 +115,10 @@ while playing:
             
             else:
                 text = myfont.render('Bin loot FAILED', True, RED)
+        
+        for sprites in allsprites:
+            WIN.blit(sprites.image, sprites.rect)
+        
         WIN.blit(text, (250, 40))
         countdown = timingfont.render(f'Time left = {60 - timeelapsed}', True, WHITE)
         WIN.blit(countdown, (20, 10))
