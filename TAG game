@@ -8,14 +8,14 @@ pygame.init()
 WIDTH, HEIGHT = 1280, 720
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('VECTORR OHHHHH YEAHHHHHHHH')
-gridsize = 40
+gridsize = 60
 
 gravity = 2
 
 font = pygame.font.SysFont('comic sans', 40)
 
-P1 = pygame.Rect((random.randint(0, WIDTH//gridsize)*gridsize)+gridsize//4, (random.randint(0, HEIGHT//gridsize)*gridsize)+gridsize//4, gridsize//2, gridsize//2)
-P2 = pygame.Rect(P1.x, P1.y, gridsize//2, gridsize//2)
+P1 = pygame.Rect(((random.randint(1, WIDTH//gridsize)*gridsize-gridsize)+gridsize//4), ((random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)+gridsize//4)-gridsize, 20, 20)
+P2 = pygame.Rect(P1.x, P1.y, 20, 20)
 
 P1kyote = 5
 P2kyote = 5
@@ -23,14 +23,18 @@ P2kyote = 5
 P1jumpthing = 15
 P2jumpthing = 15
 
-P1vel = [0, 0]
-P2vel = [0, 0]
+P1vel = [5, 5]
+P2vel = [5, 5]
 
 P1IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Red.png')), (P1.width, P1.height))
 P2IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'Blue.png')), (P2.width, P2.height))
 
 P1SCORE = 0
 P2SCORE = 0
+
+Timer = 25
+
+Reset = pygame.USEREVENT + 1
 
 class Platforms(pygame.sprite.Sprite):
     def __init__(self):
@@ -42,8 +46,8 @@ pfs = pygame.sprite.Group()
         
 for i in range(46):
     platform = Platforms()
-    platform.rect.x = (random.randint(0, WIDTH//gridsize)*gridsize)
-    platform.rect.y = (random.randint(0, HEIGHT//gridsize)*gridsize)
+    platform.rect.x = (random.randint(1, WIDTH//gridsize)*gridsize-gridsize)
+    platform.rect.y = (random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)
     pfs.add(platform)
     
 P1START = Platforms()
@@ -52,17 +56,20 @@ P1START.rect.y = P1.y-gridsize//4
 pfs.add(P1START)
     
 while P2.x == P1.x and P2.y == P1.y:
-    P2.x, P2.y = (random.randint(0, WIDTH//gridsize)*gridsize), (random.randint(0, HEIGHT//gridsize)*gridsize)
+    P2.x = (random.randint(1, WIDTH//gridsize)*gridsize-gridsize)+gridsize//4
+    P2.y = ((random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)+gridsize//4)-gridsize
     
 P2START = Platforms()
 P2START.rect.x = P2.x-gridsize//4
 P2START.rect.y = P2.y-gridsize//4
 pfs.add(P2START)
     
-FPS = 50
+FPS = 60
 c = pygame.time.Clock()
-    
 run = True
+
+
+
 
 def movement(k_p):
     global P1vel, P2vel, gravity, P1kyote, P2kyote, pfs, P1jumpthing, P2jumpthing
@@ -73,7 +80,7 @@ def movement(k_p):
     if not k_p[pygame.K_w]:
         P1jumpthing -= 1
         
-    if not k_p[pygame.K_i]:
+    if not k_p[pygame.K_UP]:
         P2jumpthing -= 1
     
     P1kyote -= 1
@@ -90,10 +97,10 @@ def movement(k_p):
     if k_p[pygame.K_d]:
         P1vel[0] += 1
     
-    if k_p[pygame.K_j]:
+    if k_p[pygame.K_LEFT]:
         P2vel[0] -= 1
     
-    if k_p[pygame.K_l]:
+    if k_p[pygame.K_RIGHT]:
         P2vel[0] += 1
     
     P1vel[1] += gravity
@@ -129,6 +136,7 @@ def movement(k_p):
             elif P1vel[1] < 0:
                 P1vel[1] = 0
                 P1.top = platform.rect.bottom
+                P1jumpthing = 0
                 
     if P1.bottom < 0 and P1vel[1] < 0:
         P1.top = HEIGHT
@@ -174,6 +182,7 @@ def movement(k_p):
             elif P2vel[1] < 0:
                 P2vel[1] = 0
                 P2.top = platform.rect.bottom
+                P2jumpthing = 0
                 
     if P2.bottom < 0 and P2vel[1] < 0:
         P2.top = HEIGHT
@@ -182,30 +191,108 @@ def movement(k_p):
         P2.bottom = 0
                 
     if P2kyote > 0:
-        if k_p[pygame.K_i]:
+        if k_p[pygame.K_UP]:
             P2vel[1] = -10
             P2jumpthing = 16
             
     if P2jumpthing > 0:
         P2vel[1] = -10
+        
+        
+        
 
 def render():
     WIN.fill((0, 0, 0))
     WIN.blit(P1IMAGE, (P1.x, P1.y))
     WIN.blit(P2IMAGE, (P2.x, P2.y))
     pfs.draw(WIN)
+    WIN.blit(font.render(f'Time left: {round(Timer, 1)}', True, (255/2, 255/2, 255/2)), (14, HEIGHT - 54))
+    WIN.blit(font.render(f'P1 SCORE: {P1SCORE}', True, (255, 0, 0)), (14, 54))
+    WIN.blit(font.render(f'{P2SCORE} :P2 SCORE', True, (0, 0, 255)), (WIDTH - font.size(f'{P2SCORE} :P2 SCORE')[0] - 14, 54))
     pygame.display.update()
+
+
+
 
 render()
 time.sleep(1)
 while run:
+    Timer -= 1/FPS
     c.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+            pygame.quit()
+            
+            
+            
+            
+        if event.type == Reset:
+            Timer = 25
+            pfs.empty()
+            
+            P1vel = [5, 5]
+            P2vel = [5, 5]
+            
+            P1kyote = 5
+            P2kyote = 5
+
+            P1jumpthing = 15
+            P2jumpthing = 15
+            
+            P1.x = (random.randint(1, WIDTH//gridsize)*gridsize-gridsize)+gridsize//4
+            P1.y = ((random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)+gridsize//4)-gridsize
+            
+            P2.x = P1.x
+            P2.y = P1.y
+            
+            P1START = Platforms()
+            P1START.rect.x = P1.x-gridsize//4
+            P1START.rect.y = P1.y-gridsize//4
+            pfs.add(P1START)
+            
+            while P2.x == P1.x and P2.y == P1.y:
+                P2.x = (random.randint(1, WIDTH//gridsize)*gridsize-gridsize)+gridsize//4
+                P2.y = ((random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)+gridsize//4)-gridsize
+                
+            for i in range(46):
+                platform = Platforms()
+                platform.rect.x = (random.randint(1, WIDTH//gridsize)*gridsize-gridsize)
+                platform.rect.y = (random.randint(1, HEIGHT//gridsize)*gridsize-gridsize)
+                pfs.add(platform)
+            
+            P1START = Platforms()
+            P1START.rect.x = P1.x-gridsize//4
+            P1START.rect.y = P1.y-gridsize//4
+            pfs.add(P1START)
+                
+            P2START = Platforms()
+            P2START.rect.x = P2.x-gridsize//4
+            P2START.rect.y = P2.y-gridsize//4
+            pfs.add(P2START)
+
+
+
+        
     k_p = pygame.key.get_pressed()
     if P1.colliderect(P2):
+        P1SCORE += 1
+        pygame.event.post(pygame.event.Event(Reset))
+        
+    if Timer < 0:
+        P2SCORE += 1
+        pygame.event.post(pygame.event.Event(Reset))
+        
+    if P1SCORE >= 5:
+        print(f'P1 WINS BY {P1SCORE - P2SCORE} POINT')
         run = False
+        pygame.quit()
+    
+    elif P2SCORE >= 5:
+        print(f'P2 WINS BY {P1SCORE - P2SCORE} POINT')
+        run = False
+        pygame.quit()
+    
     movement(k_p)
     render()
 pygame.quit()
