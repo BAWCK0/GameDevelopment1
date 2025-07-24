@@ -1,11 +1,12 @@
 import pygame
 import os
 from math import *
+import time
 import random
 
 pygame.init()
 
-font = pygame.font.SysFont('Comic Sans', 70)
+font = pygame.font.SysFont('Comic Sans', 35)
 
 WIDTH, HEIGHT = 1080, 720
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -41,21 +42,41 @@ def render():
     pygame.display.update()
     
 def movement(k_p):
-    global snake, snakevel, score, fruit, demon
+    global snake, snakevel, score, fruit, demon, demonvel, timer
     if demon.x < snake.x:
-        demonvel[0] += 3
+        if random.randint(0, 10) == 10:
+            demonvel[0] += 2
         
     else:
-        demonvel[0] -= 3
+        if random.randint(0, 10) == 10:
+            demonvel[0] -= 2
         
-    if demonvel[1] > snake.y:
-        demonvel[1] += 3
+    if demon.y > snake.y:
+        if random.randint(0, 10) == 10:
+            demonvel[1] -= 2
         
     else:
-        demonvel[1] -= 3
+        if random.randint(0, 10) == 10:
+            demonvel[1] += 2
         
-    demonvel[0] *= 0.8
-    demonvel[1] *= 0.8
+    if demon.left < 0:
+        demon.left = 0
+        demonvel[0] *= -0.5
+        
+    if demon.right > WIDTH:
+        demon.right = WIDTH
+        demonvel[0] *= -0.5
+        
+    if demon.top < 0:
+        demon.top = 0
+        demonvel[1] *= -0.5
+        
+    if demon.bottom > HEIGHT:
+        demon.bottom = HEIGHT
+        demonvel[1] *= -0.5
+        
+    demonvel[0] *= 0.95
+    demonvel[1] *= 0.95
         
     if k_p[pygame.K_w]:
         snakevel = [0, -7]
@@ -74,19 +95,23 @@ def movement(k_p):
         
     if snake.left < 0:
         snake.left = 0
-        score -= 1000000000
+        score -= sqrt(10**101)
+        timer = 0
         
     if snake.right > WIDTH:
         snake.right = WIDTH
-        score -= 1000000000
+        score -= sqrt(10**101)
+        timer = 0
         
     if snake.top < 0:
         snake.top = 0
-        score -= 1000000000
+        score -= sqrt(10**101)
+        timer = 0
         
     if snake.bottom > HEIGHT:
         snake.bottom = HEIGHT
         score -= sqrt(10**101)
+        timer = 0
         
     
         
@@ -104,24 +129,29 @@ def movement(k_p):
 
 while run:
     c.tick(FPS)
-    if timer > 0:
-        timer -= 1/FPS
-        render()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                
-        k_p = pygame.key.get_pressed()
-        movement(k_p)
+    timer -= 1/FPS
+    render()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.quit()
+            
+    k_p = pygame.key.get_pressed()
+    movement(k_p)
                     
-        snake.x += snakevel[0]
-        snake.y += snakevel[1]
+    snake.x += snakevel[0]
+    snake.y += snakevel[1]
     
     if timer < 0:
-        if score > 15:
-            WIN.blit(font.render('You.... WONNN!!!', True, (0, 0, 0)), (WIDTH//2, HEIGHT//2))
+        if score > 13:
+            run = False
+            WIN.blit(font.render('You.... WONNN!!!', True, (0, 0, 0)), (WIDTH-font.size('You.... WONNN!!!')[0], HEIGHT//2))
             
         else:
-            WIN.blit(font.render('You.... are being fed to the hamsters you FAILED >:(', True, (0, 0, 0)), (WIDTH//2, HEIGHT//2))
+            run = False
+            WIN.blit(font.render('You.... are being fed to the hamsters you FAILED >:(', True, (0, 0, 0)), (WIDTH-font.size('You.... are being fed to the hamsters you FAILED >:(')[0], HEIGHT//2))
         pygame.display.update()
+        
+time.sleep(5)
+pygame.quit()
+        
