@@ -72,6 +72,70 @@ def translate():
             elif secondunit_entry.get() == "km":
                 result = int(length_entry.get())*1000000
                 
+        elif firstunit_entry.get() == "cm":
+            if secondunit_entry.get() == "mm":
+                result = int(length_entry.get())*10
+                
+            elif secondunit_entry.get() == "cm":
+                result = int(length_entry.get())
+                
+            elif secondunit_entry.get() == "dm":
+                result = int(length_entry.get())/10
+                
+            elif secondunit_entry.get() == "m":
+                result = int(length_entry.get())/100
+                
+            elif secondunit_entry.get() == "km":
+                result = int(length_entry.get())/100000
+                
+        elif firstunit_entry.get() == "dm":
+            if secondunit_entry.get() == "mm":
+                result = int(length_entry.get())*100
+                
+            elif secondunit_entry.get() == "cm":
+                result = int(length_entry.get())*10
+                
+            elif secondunit_entry.get() == "dm":
+                result = int(length_entry.get())
+                
+            elif secondunit_entry.get() == "m":
+                result = int(length_entry.get())/10
+                
+            elif secondunit_entry.get() == "km":
+                result = int(length_entry.get())/10000
+                
+        elif firstunit_entry.get() == "m":
+            if secondunit_entry.get() == "mm":
+                result = int(length_entry.get())*1000
+                
+            elif secondunit_entry.get() == "cm":
+                result = int(length_entry.get())*100
+                
+            elif secondunit_entry.get() == "dm":
+                result = int(length_entry.get())*10
+                
+            elif secondunit_entry.get() == "m":
+                result = int(length_entry.get())
+                
+            elif secondunit_entry.get() == "km":
+                result = int(length_entry.get())/1000
+                
+        elif firstunit_entry.get() == "km":
+            if secondunit_entry.get() == "mm":
+                result = int(length_entry.get())*1000000
+                
+            elif secondunit_entry.get() == "cm":
+                result = int(length_entry.get())*100000
+                
+            elif secondunit_entry.get() == "dm":
+                result = int(length_entry.get())*10000
+                
+            elif secondunit_entry.get() == "m":
+                result = int(length_entry.get())*1000
+                
+            elif secondunit_entry.get() == "km":
+                result = int(length_entry.get())
+                
                 
         
                 
