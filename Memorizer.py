@@ -19,19 +19,19 @@ def show():
     print(memories)
 
 show_button = Button(win, text="Reveal", command=show)
-show_button.grid(rows=3, column=5)
+show_button.grid(row=3, column=5)
 
-title = Label(win, text="Memorisor")
-title.grid(rows=1, columns=5, columnspan=1)
+title = Label(win, text="MEMORISOR")
+title.grid(row=1, column=5, columnspan=1)
 
-add_button = Button(win, text="ADD", command=add)
-add_button.grid(rows=2, columns=5, columnspan=1)
+add_button = Button(win, text="Append", command=add)
+add_button.grid(row=2, column=2, columnspan=1)
 
 remove_button = Button(win, text="Deport", command=remove)
-remove_button.grid(rows=7, columns=5, columnspan=1)
+remove_button.grid(row=2, column=7, columnspan=1)
 
 input_box = Entry(win, width=20)
-input_box.grid(rows=3, columns=5, columnspan=1)
+input_box.grid(row=2, column=5, columnspan=1, padx=5, pady=5)
 
 
 
