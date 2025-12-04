@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 from tkinter.ttk import *
 import speech_recognition as sr
 from tkinter import messagebox
@@ -8,10 +9,19 @@ WIN = Tk()
 WIN.title("Speech to TEXT")
 WIN.geometry("800x400")
 
+def Save():
+    file = filedialog.asksaveasfile(defaultextension=".txt", filetypes=[("TEXT files", "*.txt"), ("ALL files", "*.*")])
+    
+    if file:
+        content = Output_Text.get("1.0", END)
+        file.write(content)
+        file.close()
+        messagebox.showwarning("Sucess", "File Saved :)")
+
 def Translate():
     r = sr.Recognizer() # initialise Recogniser
     with sr.Microphone() as source:
-        audio = r.listen()
+        audio = r.listen(source)
         try:
             text = r.recognize_google(audio)
             
@@ -30,7 +40,7 @@ Output_Text.grid(row=1, column=1, padx=20, pady=20)
 trans_button = Button(WIN, text="Click on me GOBLIN\nTo start recording!", command=Translate)
 trans_button.grid(row=1, column=0, padx=20, pady=20)
 
-'''save_button = Button(WIN, text="Save", command=Save, width=20)
-save_button.grid(row=1, column=2, padx=20, pady=20, columnspan=3)'''
+save_button = Button(WIN, text="Save", command=Save, width=20)
+save_button.grid(row=1, column=2, padx=20, pady=20, columnspan=3)
 
 WIN.mainloop()
