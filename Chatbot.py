@@ -2,58 +2,46 @@ import tkinter as tk
 
 ROOT = tk.Tk()
 
-QUESTIONS = ["?", "who", "what", "when", "why", "how"]
+QUESTIONS = ["?", "who", "what", "when", "why", "how", "are you"]
 EXCLAMATION_STATEMENTS = ["wow", "woah", "ouch", "hm", "!", "👺"]
 POSITIVE_STATEMENTS = ["good", "great", "fantastic", ":)"]
-NEGATIVE_STATEMENTS = ["bad", "horribe", "garbage", ":(", "sad"]
+NEGATIVE_STATEMENTS = ["bad", "horribe", "garbage", ":(", "sad", "angry", "ugly"]
 
 def CHATBOT_THING():
-    question_indicators = 0
-    exclamation_indicators = 0
-    positive_indicators = 0
-    negative_indicators = 0
-    message = Input.get()
+    message = (Input.get()).lower()
+    e = True
+    print(message)
+    for indicator1 in EXCLAMATION_STATEMENTS:
+        if indicator1 in message:
+            Output.config(text="Wow!")
+            e = False
+            
+    if e:    
+        for indicator2 in NEGATIVE_STATEMENTS:
+            if indicator2 in message:
+                Output.config(text="That's very bad. HAHA :) 👺👺👺👺")
+                e = False
+                        
+    if e:                    
+        for indicator3 in POSITIVE_STATEMENTS:
+            if indicator3 in message:
+                Output.config(text="That's very good :(")
+                e = False
+                            
+    if e:    
+        for indicator4 in QUESTIONS:
+            if indicator4 in message:
+                Output.config(text="I dunno GOBLIN. 👺👺")
+                e = False
+            
     
-    for indicator in QUESTIONS:
-        if indicator in message:
-            question_indicators += 1
-            
-    for indicator in EXCLAMATION_STATEMENTS:
-        if indicator in message:
-            exclamation_indicators += 1
-            
-    for indicator in POSITIVE_STATEMENTS:
-        if indicator in message:
-            if "not" in message:
-                negative_indicators += 1
-                
-            else:
-                positive_indicators += 1
-            
-    for indicator in POSITIVE_STATEMENTS:
-        if indicator in message:
-            if "not" in message:
-                positive_indicators_indicators += 1
-                
-            else:
-                negative_indicators += 1
-                
-    if question_indicators > 0:
-        Output.config(text="I dunno.")
+    if e:    
+        Output.config(text="I don't understand what you're saying. GOBLIN")
         
-    else:
-        if positive_indicators > negative_indicators:
-            if exclamation_indicators > 1:
-                Output.config(text="That's very goodddd :D")
+    
+                    
                 
-            else:
-                Output.config(text="That's good")
-            
-        elif negative_indicators == positive_indicators:
-            
-            
-        else:
-            Output.config(text="Haha 👺 :) :) :)")
+                
         
     
     
@@ -65,9 +53,9 @@ Output = tk.Label(ROOT, text="")
 Output.grid(column=0, row=2, padx=5, pady=5)
 
 Input = tk.Entry(ROOT)
-Input.grid(column=0, row=3, columnspan=1, padx=5, pady=5, bg="lime")
+Input.grid(column=0, row=3, columnspan=1, padx=5, pady=5)
 
-OK_Button = tk.Button(ROOT, text="OK", width=7, command=CHATBOT_THING)
+OK_Button = tk.Button(ROOT, text="OK", width=7, bg="lime", command=CHATBOT_THING)
 OK_Button.grid(column=1, row=3, padx=5, pady=5)
 
 ROOT.mainloop()
