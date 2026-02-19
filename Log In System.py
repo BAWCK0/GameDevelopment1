@@ -9,7 +9,7 @@ root = tk.Tk()
 
 root.title("Login")
 
-string = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!£$%௹"
+string = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!£$%"
 print(len(string))
 
 account = None
@@ -85,19 +85,18 @@ def sign_out():
         Password_Label.grid(row=1, column=3)
         Password_Entry.grid(row=1, column=4)
         Username_Entry.grid(row=1, column=2)
-        Red_Button.grid_forget()
-        Green_Button.grid_forget()
-        Blue_Button.grid_forget()
-        Normal_Button.grid_forget()
+        Strong_Password_Button.grid(row=2,column=2)
         account = None
         messagebox.showinfo("Success", "You are now signed out.")
         
 def Password_Maker():
     stringggggggggggggggg = ""
     for i in range(16):
-        stringggggggggggggggg += string[random.randint(0, 66)]
+        stringggggggggggggggg += string[random.randint(0, 65)]
+    print(stringggggggggggggggg)
     
-    Password_Entry.config(text=stringggggggggggggggg)
+    Password_Entry.delete(0, len(Password_Entry.get()))
+    Password_Entry.insert(0, stringggggggggggggggg)
 
             
 
