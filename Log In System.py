@@ -12,10 +12,39 @@ root = tk.Tk()
 account = None
 image1 = cv2.imread(os.path.join("OpenCV", "pikachu.png"), 1)
 image2 = cv2.imread(os.path.join("OpenCV", "bee.png"), 1)
+image3 = cv2.imread(os.path.join("OpenCV", "creature.jpg"), 1)
+image4 = cv2.imread(os.path.join("OpenCV", "paint.png"), 1)
+image5 = cv2.imread(os.path.join("OpenCV", "mario.jpg"), 1)
+image6 = cv2.imread(os.path.join("OpenCV", "cat.jpg"), 1)
+image7 = cv2.imread(os.path.join("OpenCV", "KENNY.jpg"), 1)
+image8 = cv2.imread(os.path.join("OpenCV", "dog.jpg"), 1)
+image9 = cv2.imread(os.path.join("OpenCV", "sierpinski triangle.png"), 1)
+image10 = cv2.imread(os.path.join("OpenCV", "whitehouse.jpg"), 1)
 image2 = cv2.resize(image2, (image1.shape[1], image1.shape[0]))
-imagechoice = image1
+image3 = cv2.resize(image3, (image1.shape[1], image1.shape[0]))
+image4 = cv2.resize(image4, (image1.shape[1], image1.shape[0]))
+image5 = cv2.resize(image5, (image1.shape[1], image1.shape[0]))
+image6 = cv2.resize(image6, (image1.shape[1], image1.shape[0]))
+image7 = cv2.resize(image7, (image1.shape[1], image1.shape[0]))
+image8 = cv2.resize(image8, (image1.shape[1], image1.shape[0]))
+image9 = cv2.resize(image9, (image1.shape[1], image1.shape[0]))
+image10 = cv2.resize(image10, (image1.shape[1], image1.shape[0]))
+images = {"Pikachu":image1,
+          "Bee":image2,
+          "Creature":image3,
+          "Paint":image4,
+          "Mario":image5,
+          "Cat":image6,
+          "KENNY":image7,
+          "Dog":image8,
+          "Sierpinski Triangle":image9,
+          "The White House":image10}
+random_thing2 = 2
+random_thing1 = 1
+imagechoice1 = image1
+imagechoice2 = image2
+saved_images = []
 string = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!£$%"
-'''R, G, B = cv2.split(image)'''
 
 def signup():
     taken = False
@@ -60,7 +89,7 @@ def signin():
                 Password_Entry.grid_forget()
                 Username_Entry.grid_forget()
                 Strong_Password_Button.grid_forget()
-                Image_Choice_Button.grid(row=11, column=1)
+                Image_Choice_Button.grid(row=11, column=1, rowspan=2)
                 Add_Button.grid(row=1, column=1, rowspan=2)
                 Subtract_Button.grid(row=3, column=1, rowspan=2)
                 Resize_Button.grid(row=5, column=1, rowspan=2)
@@ -111,30 +140,58 @@ def Password_Maker():
     Password_Entry.insert(0, stringggggggggggggggg)
     
 def switch():
-    global imagechoice
-    if Image_Choice_Button.cget("text") == "Image1":
-        Image_Choice_Button.config(text="Image2")
-        imagechoice = image2
+    global imagechoice1, imagechoice2
+    random_thing1 = random.randint(1, 3)
+    random_thing2 = random.randint(1, 3)
+    thingyyy1 = ""
+    thingyyy2 = ""
+    if random_thing1 == 1:
+        imagechoice1 = image1
+        thingyyy1 = "Pikachu"
+        
+    elif random_thing1 == 2:
+        imagechoice1 = image2
+        thingyyy1 = "Bee"
+        
+    elif random_thing1 == 3:
+        imagechoice1 = image3
+        thingyyy1 = "Creature"
+        
+        
+        
+    if random_thing2 == 1:
+        imagechoice2 = image1
+        thingyyy2 = "Pikachu"
+        
+    elif random_thing2 == 2:
+        imagechoice2 = image2
+        thingyyy2 = "Bee"
+        
+    elif random_thing2 == 3:
+        imagechoice2 = image3
+        thingyyy2 = "Creature"
     
-    else:
-        Image_Choice_Button.config(text="Image1")
-        imagechoice = image1
+    Image_Choice_Button.config(text=f"Image 1: {thingyyy1}\nImage 2: {thingyyy2}")
+        
+    
+        
+
         
 def add():
-    cv2.imshow("Weighted Image", cv2.addWeighted(image1, 0.7, image2, 0.5, 10))
+    cv2.imshow("Weighted Image", cv2.addWeighted(imagechoice1, 0.7, imagechoice2, 0.5, 10))
     
 def subtract():
-    cv2.imshow("Subtracted Image", cv2.subtract(image1, image2))
+    cv2.imshow("Subtracted Image", cv2.subtract(imagechoice1, imagechoice2))
     
 def resize():
     try:
-        cv2.imshow("Resized Image", cv2.resize(imagechoice,(int(Height_Entry.get()), int(Width_Entry.get()))))
+        cv2.imshow("Resized Image", cv2.resize(imagechoice1,(int(Height_Entry.get()), int(Width_Entry.get()))))
         
     except:
         messagebox.showerror("Error", "You did something wrong. 👁️👄👁️")
     
 def erode():
-    cv2.imshow("Eroded Image", cv2.erode(imagechoice, np.ones((6, 6), np.uint8)))
+    cv2.imshow("Eroded Image", cv2.erode(imagechoice1, np.ones((6, 6), np.uint8)))
 
             
 
@@ -156,8 +213,8 @@ Password_Entry.grid(row=1, column=4)
 Strong_Password_Button = tk.Button(root, text="Strong Password generator", command=Password_Maker)
 Strong_Password_Button.grid(row=2,column=2)
 
-Image_Choice_Button = tk.Button(root, text="Image1", command=switch, bg="lightgrey")
-Add_Button = tk.Button(root, text="Add", command=add, bg="lightgrey")
+Image_Choice_Button = tk.Button(root, text="Image 1: Pikachu\nImage 2: Bee", command=switch, bg="lightgrey")
+Add_Button = tk.Button(root, text="Add", command=add, bg="lightgrey", height=2)
 Subtract_Button = tk.Button(root, text="Subtract", command=subtract, bg="lightgrey")
 Resize_Button = tk.Button(root, text="Resize", command=resize, bg="lightgrey")
 Erode_Button = tk.Button(root, text="Erode", command=erode, bg="lightgrey")
