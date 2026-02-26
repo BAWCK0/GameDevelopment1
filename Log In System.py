@@ -2,18 +2,19 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import numpy as np
 from tkinter import filedialog
 import cv2
+import os
 
 root = tk.Tk()
-
-root.title("Login")
-
-string = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!£$%"
-print(len(string))
-
+0
 account = None
-image = cv2.imread("pikachu.png", 1)
+image1 = cv2.imread(os.path.join("OpenCV", "pikachu.png"), 1)
+image2 = cv2.imread(os.path.join("OpenCV", "bee.png"), 1)
+image2 = cv2.resize(image2, (image1.shape[1], image1.shape[0]))
+imagechoice = image1
+string = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!£$%"
 '''R, G, B = cv2.split(image)'''
 
 def signup():
@@ -58,10 +59,14 @@ def signin():
                 Username_Label.grid_forget()
                 Password_Entry.grid_forget()
                 Username_Entry.grid_forget()
-                Red_Button.grid(row=1, column=1)
-                Green_Button.grid(row=1, column=2)
-                Blue_Button.grid(row=1, column=3)
-                Normal_Button.grid(row=1, column=4)
+                Strong_Password_Button.grid_forget()
+                Image_Choice_Button.grid(row=11, column=1)
+                Add_Button.grid(row=1, column=1, rowspan=2)
+                Subtract_Button.grid(row=3, column=1, rowspan=2)
+                Resize_Button.grid(row=5, column=1, rowspan=2)
+                Height_Entry.grid(row=5, column=2)
+                Width_Entry.grid(row=6, column=2)
+                Erode_Button.grid(row=9, column=1, rowspan=2)
                 messagebox.showinfo("Success!", "You are now signed in!")
             
             else:
@@ -86,6 +91,13 @@ def sign_out():
         Password_Entry.grid(row=1, column=4)
         Username_Entry.grid(row=1, column=2)
         Strong_Password_Button.grid(row=2,column=2)
+        Image_Choice_Button.grid_forget()
+        Add_Button.grid_forget()
+        Subtract_Button.grid_forget()
+        Resize_Button.grid_forget()
+        Erode_Button.grid_forget()
+        Height_Entry.grid_forget()
+        Width_Entry.grid_forget()
         account = None
         messagebox.showinfo("Success", "You are now signed out.")
         
@@ -97,6 +109,32 @@ def Password_Maker():
     
     Password_Entry.delete(0, len(Password_Entry.get()))
     Password_Entry.insert(0, stringggggggggggggggg)
+    
+def switch():
+    global imagechoice
+    if Image_Choice_Button.cget("text") == "Image1":
+        Image_Choice_Button.config(text="Image2")
+        imagechoice = image2
+    
+    else:
+        Image_Choice_Button.config(text="Image1")
+        imagechoice = image1
+        
+def add():
+    cv2.imshow("Weighted Image", cv2.addWeighted(image1, 0.7, image2, 0.5, 10))
+    
+def subtract():
+    cv2.imshow("Subtracted Image", cv2.subtract(image1, image2))
+    
+def resize():
+    try:
+        cv2.imshow("Resized Image", cv2.resize(imagechoice,(int(Height_Entry.get()), int(Width_Entry.get()))))
+        
+    except:
+        messagebox.showerror("Error", "You did something wrong. 👁️👄👁️")
+    
+def erode():
+    cv2.imshow("Eroded Image", cv2.erode(imagechoice, np.ones((6, 6), np.uint8)))
 
             
 
@@ -113,19 +151,16 @@ Username_Entry = tk.Entry(root)
 Username_Entry.grid(row=1, column=2)
 Password_Label = tk.Label(root, text="Password:")
 Password_Label.grid(row=1, column=3)
-Password_Entry = tk.Entry()
+Password_Entry = tk.Entry(root)
 Password_Entry.grid(row=1, column=4)
 Strong_Password_Button = tk.Button(root, text="Strong Password generator", command=Password_Maker)
 Strong_Password_Button.grid(row=2,column=2)
 
-'''Red_Button = tk.Button(root, text="Red", command=cv2.imshow("Blue saturation!", B), bg="red")
-Green_Button = tk.Button(root, text="Green", command=cv2.imshow("Goblin saturation!", G), bg="lime")
-Blue_Button = tk.Button(root, text="Blue", command=cv2.imshow("Red saturation!", R), bg="blue")
-Normal_Button = tk.Button(root, text="Normal", command=cv2.imshow("Original!", image), bg="lightgrey")'''
-
-Red_Button = tk.Button(root, text="Red", bg="red")
-Green_Button = tk.Button(root, text="Green", bg="lime")
-Blue_Button = tk.Button(root, text="Blue", bg="blue")
-Normal_Button = tk.Button(root, text="Normal", bg="lightgrey")
+Image_Choice_Button = tk.Button(root, text="Image1", command=switch, bg="lightgrey")
+Add_Button = tk.Button(root, text="Add", command=add, bg="lightgrey")
+Subtract_Button = tk.Button(root, text="Subtract", command=subtract, bg="lightgrey")
+Resize_Button = tk.Button(root, text="Resize", command=resize, bg="lightgrey")
+Erode_Button = tk.Button(root, text="Erode", command=erode, bg="lightgrey")
+Height_Entry = tk.Entry(root)
+Width_Entry = tk.Entry(root)
 root.mainloop()
-
